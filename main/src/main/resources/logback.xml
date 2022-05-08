@@ -1,20 +1,25 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
 <configuration>
-   <appender name = "STDOUT" class = "ch.qos.logback.core.ConsoleAppender">
-      <encoder>
-         <pattern>[%d{yyyy-MM-dd'T'HH:mm:ss.sss'Z'}] [%C] [%t] [%L] [%-5p] %m%n</pattern>
-      </encoder>
-   </appender>
-   
-   <appender name = "FILE" class = "ch.qos.logback.core.FileAppender">
-      <File>/var/tmp/mylog.log</File>
-      <encoder>
-         <pattern>[%d{yyyy-MM-dd'T'HH:mm:ss.sss'Z'}] [%C] [%t] [%L] [%-5p] %m%n</pattern>
-      </encoder>
-   </appender>
-   
-   <root level = "INFO">
-      <appender-ref ref = "FILE"/>
-      <appender-ref ref = "STDOUT"/> 
-   </root>
+    <property name="LOG_DIR" value="E:/var/log/ig/webhook" />
+    <property name="FILE_PREFIX" value="webhook" />
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${FILE_PREFIX}.log</file>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</Pattern>
+        </encoder>
+
+        <!-- limit log only to 10MB and max 24h -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/archived/${FILE_PREFIX}.%d{yyyy-MM-dd HH:mm:ss}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="FILE" />
+    </root>
 </configuration>
