@@ -20,7 +20,8 @@ public class WebhookPojo {
     public String data;
 
     @Autowired
-    public WebhookPojo(Date created_at, String data) {
+    public WebhookPojo(String id, Date created_at, String data) {
+        this.id = id;
         this.created_at = created_at;
         this.data = data;
     }
